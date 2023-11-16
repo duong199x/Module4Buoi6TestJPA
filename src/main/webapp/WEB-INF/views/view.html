@@ -22,7 +22,7 @@
     </div>
     <div class="cus-detail">
         <label>Image:</label>
-        <label th:text="${student.image}"></label>
+        <img th:src="@{'/static/image/'+${student.getImage()}}" alt="" style="width: 100px"/>
     </div>
 </div>
 </body>

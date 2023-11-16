@@ -1,16 +1,22 @@
 package com.codegym.controller;
 
 import com.codegym.model.Student;
+import com.codegym.model.StudentForm;
 import com.codegym.repository.IStudentRepository;
 import com.codegym.repository.StudentRepository;
 import com.codegym.service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -18,6 +24,9 @@ import java.util.List;
 public class StudentController {
     @Autowired
     private IStudentService studentService;
+    @Value("${file_upload}")
+    private String fileUpload;
+
 
     @GetMapping("")
     public ModelAndView index() {
@@ -29,12 +38,21 @@ public class StudentController {
 
     @GetMapping("/create")
     public String create(Model model) {
-        model.addAttribute("student", new Student());
+//        model.addAttribute("student", new Student());
+        model.addAttribute("student", new StudentForm());
         return "/create";
     }
 
     @PostMapping("/save")
-    public String save(Student student) {
+    public String save(StudentForm studentForm) {
+        MultipartFile file = studentForm.getImage();
+        String nameImage = file.getOriginalFilename();
+        try {
+            FileCopyUtils.copy(file.getBytes(), new File(fileUpload + nameImage));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        Student student = new Student(studentForm.getName(), studentForm.getAddress(), nameImage);
         studentService.save(student);
         return "redirect:/students";
     }
@@ -46,8 +64,18 @@ public class StudentController {
     }
 
     @PostMapping("/update")
-    public String update(Student student) {
-        studentService.save(student);
+    public String update(StudentForm studentForm) {
+        MultipartFile file = studentForm.getImage();
+        if (file != null) {
+            String nameImage = file.getOriginalFilename();
+            try {
+                FileCopyUtils.copy(file.getBytes(), new File(fileUpload + nameImage));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Student student = new Student(studentForm.getId(), studentForm.getName(), studentForm.getAddress(), nameImage);
+            studentService.save(student);
+        }
         return "redirect:/students";
     }
 
@@ -63,6 +91,7 @@ public class StudentController {
         model.addAttribute("student", studentService.findById(id));
         return "/view";
     }
+
     @GetMapping("/search")
     public ModelAndView search(@RequestParam("search") String search) {
         List<Student> studentList = studentService.findByName(search);

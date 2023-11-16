@@ -12,8 +12,7 @@
     </a>
 </p>
 <div id="form">
-    <form th:action="@{/students/save}" th:object="${student}" method="POST" novalidate="novalidate">
-        <input type="hidden" th:field="*{id}"/>
+    <form th:action="@{/students/save}" th:object="${student}" method="POST" novalidate="novalidate" enctype="multipart/form-data">
         <div>
             <label for="name">Name</label>
             <input type="text" id="name" th:field="*{name}"/>
@@ -24,7 +23,7 @@
         </div>
         <div>
             <label for="image">Image</label>
-            <input type="text" id="image" th:field="*{image}"/>
+            <input type="file" id="image" th:field="*{image}"/>
         </div>
         <input type="submit" value="Save"/>
     </form>

@@ -3,46 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 </head>
 <body>
 <h3>Student</h3>
+<center>
 <p>
     <a th:href="@{/students/create}">
-        Add new Student
+        <button type="button" class="btn btn-primary">Add new Student</button>
     </a>
 </p>
 <div>
-    <form th:action="@{/students/search}" method="get" >
+    <form th:action="@{/students/search}" method="get">
         <input type="text" name="search"/>
         <input type="submit" value="Search"/>
     </form>
 
 </div>
+</center>
 <div class="notify">
     <div th:if="${success}">
         <span th:text="${success}"></span>
     </div>
 </div>
 
-<table id="students" border="1px solid black" style="border-collapse: collapse">
+<table id="students" border="1px solid black" style="border-collapse: collapse" class="table table-striped">
     <thead>
     <tr>
-        <th>Id</th>
-        <th>name</th>
-        <th>Address</th>
-        <th>Image</th>
-        <th colspan="3">Action</th>
+        <th scope="col">Id</th>
+        <th scope="col">name</th>
+        <th scope="col">Address</th>
+        <th scope="col">Image</th>
+        <th scope="col" colspan="3">Action</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="row : ${studentList}">
-        <td th:text="${row.getId()}"></td>
+        <td scope="row" th:text="${row.getId()}"></td>
         <td th:text="${row.getName()}"></td>
         <td th:text="${row.getAddress()}"></td>
-        <td th:text="${row.getImage()}"></td>
-        <td><a th:href="@{/students/{id}/edit(id=${row.getId()})}"><button>edit</button> </a></td>
-        <td><a th:href="@{/students/{id}/delete(id=${row.getId()})}"><button>delete</button></a></td>
-        <td><a th:href="@{/students/{id}/view(id=${row.getId()})}"><button>view</button></a></td>
+        <td><img th:src="@{'/static/image/'+${row.getImage()}}" alt="" style="width: 100px;/></td>
+        <td><a th:href="@{/students/{id}/edit(id=${row.getId()})}">
+            <buttontype="button" class="btn btn-success" >Edit</button>
+        </a></td>
+        <td><a th:href="@{/students/{id}/delete(id=${row.getId()})}">
+            <button type="button" class="btn btn-danger">Delete</button>
+        </a></td>
+        <td><a th:href="@{/students/{id}/view(id=${row.getId()})}">
+            <button type="button" class="btn btn-info">view</button>
+        </a></td>
     </tr>
     </tbody>
 </table>

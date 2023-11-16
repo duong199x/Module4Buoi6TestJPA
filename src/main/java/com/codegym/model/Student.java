@@ -22,6 +22,12 @@ public class Student {
         this.image = image;
     }
 
+    public Student(String name, String address, String image) {
+        this.name = name;
+        this.address = address;
+        this.image = image;
+    }
+
     public Long getId() {
         return id;
     }
