@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>Student</h3>
+<p>
+    <a th:href="@{/students/create}">
+        Add new Student
+    </a>
+</p>
+<div>
+    <form th:action="@{/students/search}" method="get" >
+        <input type="text" name="search"/>
+        <input type="submit" value="Search"/>
+    </form>
+
+</div>
+<div class="notify">
+    <div th:if="${success}">
+        <span th:text="${success}"></span>
+    </div>
+</div>
+
+<table id="students" border="1px solid black" style="border-collapse: collapse">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>name</th>
+        <th>Address</th>
+        <th>Image</th>
+        <th colspan="3">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="row : ${studentList}">
+        <td th:text="${row.getId()}"></td>
+        <td th:text="${row.getName()}"></td>
+        <td th:text="${row.getAddress()}"></td>
+        <td th:text="${row.getImage()}"></td>
+        <td><a th:href="@{/students/{id}/edit(id=${row.getId()})}"><button>edit</button> </a></td>
+        <td><a th:href="@{/students/{id}/delete(id=${row.getId()})}"><button>delete</button></a></td>
+        <td><a th:href="@{/students/{id}/view(id=${row.getId()})}"><button>view</button></a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
